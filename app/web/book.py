@@ -1,9 +1,8 @@
 from flask import jsonify, request
 from app.libs.helper import is_isbn_or_key
 from app.spider.yushu_book import YuShuBook
-from forms.book import SearchForm
+from app.forms.book import SearchForm
 from . import web
-print(id(web))
 
 # # 调用方式 curl -i localhost:5001/http://127.0.0.1:5000/book/search/9787501524044/1
 # # Get 请求参数在url中的路由定义
