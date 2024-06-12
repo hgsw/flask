@@ -2,6 +2,7 @@ from flask import jsonify, request
 from app.libs.helper import is_isbn_or_key
 from app.spider.yushu_book import YuShuBook
 from app.forms.book import SearchForm
+from app.view_models.book import BookViewModel
 from . import web
 
 # # 调用方式 curl -i localhost:5001/http://127.0.0.1:5000/book/search/9787501524044/1
@@ -40,6 +41,7 @@ def search2():
         isbn_or_key = is_isbn_or_key(q)
         if isbn_or_key == "isbn":
             result = YuShuBook.search_by_isbn(q)
+            result = BookViewModel.package_single(result, q)
         else:
             result = YuShuBook.search_by_keyword(q, page)
 

@@ -10,15 +10,29 @@ class YuShuBook:
 
     @classmethod
     def search_by_isbn(cls, isbn):
-        key = current_app.config["KEY"]
-        url = cls.isbn_url.format(key, isbn)
+        import json
+
+        # key = current_app.config["KEY"]
+        # url = cls.isbn_url.format(key, isbn)
         # result = HTTP.get(url)
         result = Book.query.filter_by(isbn=isbn).first()
-        if result is None:
-            return {"error": "not found"}
+        if result:
+            result = {
+                "id": result.id,
+                "title": result.title,
+                "author": result.author,
+                "binging": result.binging,
+                "publisher": result.publisher,
+                "price": result.price,
+                "pages": result.pages,
+                "pubdate": result.pubdate,
+                "isbn": result.isbn,
+                "summary": result.summary,
+                "image": result.image,
+            }
+            return result
 
-        result = {"id": result.id, "isbn": result.isbn}
-        return result
+        return {}
 
     @classmethod
     def search_by_keyword(cls, keyword, page=1):
