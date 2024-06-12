@@ -20,6 +20,15 @@ from . import web
 #     # return json.dumps(result), 200, {"content-type": "application/json"}
 
 
+"""
+这里有一个问题，request只是一个变量
+当同时有不同的请求过来时，request如何区分不同请求所带的参数呢
+单线程：比较简单，请求进来会是实例化一个request，其他请求需要排队（再实例化一个request）
+多线程：短时间内多个请求进来，我们是无法区别request请求的，当修改request指向的数据，可能会造成数据的污染
+多线程使用线程隔离，将不同的请求保存在字典中，key是线程的id号，value是request实例对象 参考 test/test3.py
+"""
+
+
 @web.route("/book/search2")
 def search2():
     # 参数校验
