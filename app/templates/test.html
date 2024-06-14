@@ -1,17 +1,8 @@
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <title></title>
-</head>
-
-<body>
-    夏天 <br>
+{% extends "layout.html" %}
+{% block content %}
     {{data.age}}
     {#jinja1#}
     {% if data.age < 18 %} {{ data.name}} 
     {% elif data.age ==18 %} hello
     {% else %} {{data.age}} {% endif %} 
-</body>
-
-</html>
+{% endblock %}
