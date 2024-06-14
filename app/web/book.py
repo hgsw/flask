@@ -1,4 +1,4 @@
-from flask import jsonify, request
+from flask import jsonify, request, render_template
 from app.libs.helper import is_isbn_or_key
 from app.spider.yushu_book import YuShuBook
 from app.forms.book import SearchForm
@@ -60,3 +60,10 @@ def info():
     测试路由
     """
     return jsonify("hello")
+
+
+@web.route("/test")
+def test():
+    r = {"name": "Tom", "age": 18}
+    # return jsonify(r)
+    return render_template("test2.html", data=r)
