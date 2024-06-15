@@ -8,6 +8,12 @@ class BookViewModel:
         self.summary = book["summary"]
         self.image = book["image"]
 
+    @property
+    def intro(self):
+        instros = filter(lambda x: True if x else False, [self.author, self.publisher, self.price])
+
+        return "/".join(instros)
+
 
 class BookCollection:
     def __init__(self):

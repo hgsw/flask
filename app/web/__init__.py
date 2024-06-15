@@ -7,3 +7,8 @@ web = Blueprint("web", __name__)
 # 表面上这个web像循环导入，实际上只执行一次
 from app.web import book
 from app.web import user
+from app.web import auth
+from app.web import drift
+from app.web import gift
+from app.web import main
+from app.web import wish

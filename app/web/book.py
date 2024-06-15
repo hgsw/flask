@@ -32,8 +32,8 @@ from . import web
 """
 
 
-@web.route("/book/search2")
-def search2():
+@web.route("/book/search")
+def search():
     # 参数校验
     form = SearchForm(request.args)
     books = BookCollection()
@@ -48,11 +48,17 @@ def search2():
         else:
             yushu_book.search_by_keyword(q, page)
         books.fill(yushu_book, q)
-        return json.dumps(books, default=lambda o: o.__dict__, ensure_ascii=False)
-        # return jsonify(books.__dict__)
 
-    return jsonify(form.errors)
+        # return json.dumps(books, default=lambda o: o.__dict__, ensure_ascii=False)
+    else:
+        flash("关键字不存在，重新输入")
+        
+    return render_template("search_result.html", books=books)
 
+
+@web.route("/book/<isbn>/detail")
+def book_detail():
+    pass
 
 @web.route("/book/info")
 def info():
@@ -61,10 +67,3 @@ def info():
     """
     return jsonify("hello")
 
-
-@web.route("/test")
-def test():
-    r = {"name": "Tom", "age": 18}
-    # 向用户显示一次性通知或信息的常用方式，这些消息通常会在页面重定向后展示给用户
-    flash("hello flash") 
-    return render_template("test.html", data=r)
