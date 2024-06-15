@@ -68,3 +68,8 @@ class YuShuBook:
         # 关键字查询，会返回多个books的结果
         self.total = data["pages"]
         self.books.append(data["books"])
+
+    @property
+    def first(self):
+        """这个封装是有意义的，使用者无需了解YuShuBook类的内部逻辑，只需要了解类对外暴露的属性和方法即可"""
+        return self.books[0] if self.total >= 1 else None
