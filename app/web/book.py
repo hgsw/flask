@@ -1,4 +1,4 @@
-from flask import jsonify, request, render_template
+from flask import jsonify, request, render_template, flash
 from app.libs.helper import is_isbn_or_key
 from app.spider.yushu_book import YuShuBook
 from app.forms.book import SearchForm
@@ -65,5 +65,6 @@ def info():
 @web.route("/test")
 def test():
     r = {"name": "Tom", "age": 18}
-    # return jsonify(r)
-    return render_template("test2.html", data=r)
+    # 向用户显示一次性通知或信息的常用方式，这些消息通常会在页面重定向后展示给用户
+    flash("hello flash") 
+    return render_template("test.html", data=r)

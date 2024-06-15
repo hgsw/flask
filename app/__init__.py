@@ -4,7 +4,9 @@ from app.models.book import db
 
 
 def create_app():
-    app = Flask(__name__)
+    # template_folder 指定模本文件路径
+    # app = Flask(__name__, template_folder="web/templates")
+    app = Flask(__name__)  # __name__决定当前项目的根目录是/app
     app.config.from_object("app.setting")
     app.config.from_object("app.secure.BaseConfig")
     app.config.from_object("app.secure.Token")

@@ -19,3 +19,5 @@ class BaseConfig:
 
 class Token:
     KEY = "c00fxxx"
+    # 设置一个密钥以启用session，随机初始化字符串
+    SECRET_KEY = "hfiiuafwfhehfihwjsdcijhfcsjihcuiwe12742664284686246842"

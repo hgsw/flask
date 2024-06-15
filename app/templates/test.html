@@ -1,8 +1,13 @@
 {% extends "layout.html" %}
 {% block content %}
-    {{data.age}}
-    {#jinja1#}
-    {% if data.age < 18 %} {{ data.name}} 
-    {% elif data.age ==18 %} hello
-    {% else %} {{data.age}} {% endif %} 
+{{data.age}}
+
+{% if data.age < 18 %} 
+    {{ data.name}} 
+{% elif data.age==18 %} 
+    {% set messages=get_flashed_messages()%} 
+    {{messages}} 
+{% else %} 
+    {{data.age}} 
+{% endif %} 
 {% endblock %}
