@@ -13,3 +13,10 @@ class Base(db.Model):
 
     # create_time = Column("create_time", Integer)
     status = Column(SmallInteger, default=1)
+
+    def set_attrs(self, attrs_dict):
+        """动态对传入attrs_dict同名的属性进行复值
+        hasattr(object, key)判断对象是否包含key这个属性"""
+        for key, value in attrs_dict.items():
+            if hasattr(self, key) and key != "id":
+                setattr(self, key, value)
