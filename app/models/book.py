@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String
-from app.models.base import db
+from app.models.base import Base
 
-class Book(db.Model):
+class Book(Base):
 
     __tablename__ = "book"
 

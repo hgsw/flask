@@ -1,9 +1,10 @@
-from app.models.base import db
+from app.models.base import Base
 from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
 from sqlalchemy.orm import relationship
 
 
-class Gift(db.Model):
+class Gift(Base):
+    
     __tablename__ = "gift"
 
     id = Column(Integer, primary_key=True)
