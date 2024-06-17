@@ -1,6 +1,20 @@
 from flask import Flask
+from flask_login import LoginManager
 from app.web import web
 from app.models.base import db
+from app.models.user import User
+
+login_manager = LoginManager()
+
+
+# @login_manager.user_loader
+# 每个请求开始时（如果需要的话），根据会话中存储的用户id重新加载用户对象
+# Flask-Login使用这个函数来恢复一个已经登录的用户的完整对象实例，以便在整个请求生命周期中使用
+@login_manager.user_loader
+def load_user(user_id):
+    # user = db.session.query(User).get(user_id)
+    user = User.query.get(int(user_id))
+    return user
 
 
 def create_app():
@@ -14,6 +28,10 @@ def create_app():
     # 注册路由可在url前面增加路由前缀
     # app.register_blueprint(blueprint=web, url_prefix="/book")
     app.register_blueprint(blueprint=web)
+    login_manager.init_app(app)
+    # 当访问需要登录的页面，这里可以定义跳转登录的界面
+    login_manager.login_view = "web.login"
+    login_manager.login_message = "请先登录或注册"
     with app.app_context():
         db.init_app(app)
         db.create_all()

@@ -1,9 +1,13 @@
 from . import web
+from flask_login import login_required
 
 
 @web.route("/my/gifts")
+@login_required
 def my_gifts():
-    pass
+    """@login_required用于授权登录
+    但是需要@login_manager.user_loader装饰函数返回的user对象"""
+    return "gifts"
 
 
 @web.route("/gifts/book/<isbn>")
