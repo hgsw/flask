@@ -1,5 +1,8 @@
 from . import web
-from flask_login import login_required
+from flask_login import login_required, current_user
+from app.models.gift import Gift
+from app.models.base import db
+from flask import current_app, flash
 
 
 @web.route("/my/gifts")
@@ -11,8 +14,25 @@ def my_gifts():
 
 
 @web.route("/gifts/book/<isbn>")
+@login_required
 def save_to_gifts(isbn):
-    pass
+    if current_user.can_save_to_list(isbn):
+        # try:
+        with db.auto_commit():
+            # 这里操作了两张表，需要事务处理，需要回滚
+            gift = Gift()
+            gift.isbn = isbn
+            # current_user是实例化user的模型
+            gift.uid = current_user.id
+            current_user.beans += current_app.config["BEANS_UPLOAD_ONE_BOOK"]
+            db.sessention.add(gift)
+        #     db.session.commit()
+        # except Exception as e:
+        #     # 如果不回滚会导致后面数据无法再操作
+        #     db.session.rollback()
+        #     raise e
+    else:
+        flash("图书已存在你的赠送清单或存在你的心愿清单，请勿重复添加")
 
 
 @web.route("/gifts/<gid>/redraw")

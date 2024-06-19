@@ -71,5 +71,14 @@ class YuShuBook:
 
     @property
     def first(self):
-        """这个封装是有意义的，使用者无需了解YuShuBook类的内部逻辑，只需要了解类对外暴露的属性和方法即可"""
+        """根据是isbn或关键词查询三方接口或数据库的图书
+        这个封装是有意义的，使用者无需了解YuShuBook类的内部逻辑，只需要了解类对外暴露的属性和方法即可"""
         return self.books[0] if self.total >= 1 else None
+
+    def exist_book_by_isbn(self, isbn):
+        """在赠送书籍的时候，需要保证书籍是存在的，这里应该调用三方接口
+        此时我们是查询我们本地的数据库"""
+        book = Book.query.filter_by(isbn=isbn).first()
+        if book:
+            return True
+        return False

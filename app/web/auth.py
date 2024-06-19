@@ -10,11 +10,12 @@ from flask_login import login_user
 def register():
     form = RegisterForm(request.form)
     if request.method == "POST" and form.validate():
-        user = User()
-        # 这里非常重要的思想，动态赋值且考虑到password的处理逻辑
-        user.set_attrs(form.data)
-        db.session.add(user)
-        db.session.commit()
+        with db.auto_commit():  # 使用是with回滚数据库
+            user = User()
+            # 这里非常重要的思想，动态赋值且考虑到password的处理逻辑
+            user.set_attrs(form.data)
+            db.session.add(user)
+        # db.session.commit()
         return redirect(url_for("web.login"))
 
     return render_template("auth/register.html", form=form)
