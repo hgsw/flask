@@ -53,8 +53,8 @@ class User(UserMixin, Base):
         # 不允许一个用户同时赠送多本相同的图书
         # 一个用户不可能同时成为赠送和索要者
 
-        gifting = Gift.query.filter_by(uid=id, isbn=isbn, launched=False).first()
-        wishing = Wish.query.filter_by(uid=id, isbn=isbn, launched=False).first()
+        gifting = Gift.query.filter_by(uid=self.id, isbn=isbn, launched=False).first()
+        wishing = Wish.query.filter_by(uid=self.id, isbn=isbn, launched=False).first()
 
         if not gifting and not wishing:
             return True

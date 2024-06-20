@@ -34,7 +34,7 @@ class YuShuBook:
                 "id": result.id,
                 "title": result.title,
                 "author": result.author,
-                "binging": result.binging,
+                "binding": result.binding,
                 "publisher": result.publisher,
                 "price": result.price,
                 "pages": result.pages,
