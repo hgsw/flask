@@ -24,6 +24,7 @@ def create_app():
     app.config.from_object("app.setting")
     app.config.from_object("app.secure.BaseConfig")
     app.config.from_object("app.secure.Token")
+    app.config['SQLALCHEMY_ECHO'] = True  # 启用SQL语句的打印
 
     # 注册路由可在url前面增加路由前缀
     # app.register_blueprint(blueprint=web, url_prefix="/book")
