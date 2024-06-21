@@ -12,8 +12,10 @@ def my_gifts():
     """@login_required用于授权登录
     但是需要@login_manager.user_loader装饰函数返回的user对象"""
     uid = current_user.id
+    # 根据当前用户id查询所有书籍
     gifts = Gift.get_user_gifts(uid)
     isbn_lst = [gift.isbn for gift in gifts]
+    # 根据isbn查询想要此书籍的人
     wish_count_lst = Gift.get_wish_counts(isbn_lst)
     my_gifts = MyGifts(gifts, wish_count_lst)
 
