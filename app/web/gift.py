@@ -1,8 +1,9 @@
 from . import web
 from flask_login import login_required, current_user
 from app.models.gift import Gift
+from app.view_models.gift import MyGifts
 from app.models.base import db
-from flask import current_app, flash, redirect, url_for
+from flask import current_app, flash, redirect, url_for, render_template
 
 
 @web.route("/my/gifts")
@@ -10,7 +11,13 @@ from flask import current_app, flash, redirect, url_for
 def my_gifts():
     """@login_required用于授权登录
     但是需要@login_manager.user_loader装饰函数返回的user对象"""
-    return "gifts"
+    uid = current_user.id
+    gifts = Gift.get_user_gifts(uid)
+    isbn_lst = [gift.isbn for gift in gifts]
+    wish_count_lst = Gift.get_wish_counts(isbn_lst)
+    my_gifts = MyGifts(gifts, wish_count_lst)
+
+    return render_template("my_gifts.html", gifts=my_gifts.gifts)
 
 
 @web.route("/gifts/book/<isbn>")
