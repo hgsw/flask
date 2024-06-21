@@ -2,12 +2,21 @@ from . import web
 from flask_login import login_required, current_user
 from app.models.base import db
 from app.models.wish import Wish
-from flask import flash, redirect, url_for
+from app.view_models.wish import MyWishes
+from flask import flash, redirect, url_for, render_template
 
 
 @web.route("/my/wish")
 def my_wish():
-    pass
+    uid = current_user.id
+    # 根据当前用户id查询所有书籍
+    wishes = Wish.get_user_wishes(uid)
+    isbn_lst = [wish.isbn for wish in wishes]
+    
+    wish_count_lst = Wish.get_gift_counts(isbn_lst)
+    view_model = MyWishes(wishes, wish_count_lst)
+
+    return render_template("my_wish.html", wishes=view_model.gifts)
 
 
 @web.route("/wish/book/<isbn>")

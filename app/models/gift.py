@@ -2,7 +2,6 @@ from app.models.base import Base
 from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, desc, func
 from sqlalchemy.orm import relationship
 from app.models.base import db
-from app.models.wish import Wish
 from flask import current_app
 from app.spider.yushu_book import YuShuBook
 from sqlalchemy.sql import func, and_
@@ -32,6 +31,8 @@ class Gift(Base):
 
     @classmethod
     def get_wish_counts(cls, isbn_lst):
+        from app.models.wish import Wish
+
         """根据一组isbn到wish表中查询礼物的wish的心愿数量"""
         # db.session.query(Wish).filter(Wish.launched == False, Wish.isbn.in_(isbn_lst), Wish.status == 1).all()
 
