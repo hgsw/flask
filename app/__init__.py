@@ -3,8 +3,10 @@ from flask_login import LoginManager
 from app.web import web
 from app.models.base import db
 from app.models.user import User
+from flask_mail import Mail
 
 login_manager = LoginManager()
+mail = Mail()
 
 
 # @login_manager.user_loader
@@ -24,15 +26,21 @@ def create_app():
     app.config.from_object("app.setting")
     app.config.from_object("app.secure.BaseConfig")
     app.config.from_object("app.secure.Token")
+    app.config.from_object("app.secure.MailConfig")
     app.config["SQLALCHEMY_ECHO"] = True  # 启用SQL语句的打印
 
     # 注册路由可在url前面增加路由前缀
     # app.register_blueprint(blueprint=web, url_prefix="/book")
     app.register_blueprint(blueprint=web)
+
+    # 用户登录插件
     login_manager.init_app(app)
     # 当访问需要登录的页面，这里可以定义跳转登录的界面
     login_manager.login_view = "web.login"
     login_manager.login_message = "请先登录或注册"
+    # 邮箱插件
+    mail.init_app(app)
+
     with app.app_context():
         db.init_app(app)
         db.create_all()

@@ -2,11 +2,14 @@ from app.models.base import Base
 from sqlalchemy import Column, Integer, String, Boolean, Float, ForeignKey
 from sqlalchemy.orm import relationship
 from werkzeug.security import generate_password_hash, check_password_hash
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from flask_login import UserMixin
+from flask import current_app
 from app.libs.helper import is_isbn_or_key
 from app.spider.yushu_book import YuShuBook
 from app.models.gift import Gift
 from app.models.wish import Wish
+from app.models.base import db
 
 
 class User(UserMixin, Base):
@@ -60,3 +63,25 @@ class User(UserMixin, Base):
             return True
         else:
             return False
+
+    def generate_token(self, expiration=600):
+        s = Serializer(current_app.config["SECRET_KEY"], expiration)
+        a = s.dumps({"id": self.id}).decode("utf-8")
+        print(a)
+        return s.dumps({"id": self.id}).decode("utf-8")
+
+    @staticmethod
+    def reset_password(token, new_password):
+        # token可能过期
+        # token可能是别人伪造的
+        s = Serializer(current_app.config["SECRET_KEY"])
+        try:
+            data = s.loads(token.encode("utf-8"))
+        except:
+            return False
+
+        uid = data.get("id")
+        with db.auto_commit():
+            user = User.query.get(uid)
+            user.password = new_password
+        return True
