@@ -9,6 +9,8 @@ from app.view_models.book import BookViewModel
 from sqlalchemy.sql import or_
 from sqlalchemy import desc
 from app.view_models.drift import DriftCollection
+from app.libs.enums import PendingStatus
+from app.models.user import User
 
 
 @web.route("/drift/<int:gid>", methods=["GET", "POST"])
@@ -52,13 +54,32 @@ def pending():
 
 
 @web.route("/drift/<int:did>/reject")
+@login_required
 def reject_drift(did):
-    pass
+    with db.auto_commit():
+
+        drift = Drift.query.filter(Gift.uid == current_user.id, Drift.id == did).first_or_404()
+
+        drift.pending = PendingStatus.reject
+        requester = User.query.get_or_404(drift.requester_id)
+        requester.beans += 1
+
+    return redirect(url_for("web.pending"))
 
 
 @web.route("/drift/<int:did>/redraw")
+@login_required
 def redraw_drift(did):
-    pass
+
+    with db.auto_commit():
+        # Drift.requester_id==current_user.id过滤条件阻止超权
+        drift = Drift.query.filter(Drift.requester_id == current_user.id, Drift.id == did).first_or_404()
+        # drift.pending = PendingStatus.redraw.value
+        drift.pending = PendingStatus.redraw  # 重写@property和@pending.setter
+        # 将鱼豆加回去 ! 可能会发生超权 @login_required无法防止超权
+        current_user.beans += 1
+
+    return redirect(url_for("web.pending"))
 
 
 @web.route("/drift/<int:did>/mailed")

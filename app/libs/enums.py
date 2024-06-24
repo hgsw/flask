@@ -16,3 +16,7 @@ class PendingStatus(Enum):
             cls.success: {"requester": "对方已邮寄", "gifter": "你已邮寄，交易完成"},
         }
         return key_map[status][key]
+
+
+# print(type(PendingStatus.redraw))  # <enum 'PendingStatus'>
+# print(PendingStatus.redraw.value)  # 4

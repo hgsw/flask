@@ -28,15 +28,17 @@ class Drift(Base):
     gifter_id = Column(Integer)
     gift_id = Column(Integer)
     gifter_nickname = Column(String(20))
-    
+
     _pending = Column("pending", SmallInteger, default=1)
     # gift_id = Column(Integer, ForeignKey('gift.id'))
     # gift = relationship('Gift')
 
     @property
     def pending(self):
+        # 读取的时将pending转化为枚举
         return PendingStatus(self._pending)
 
     @pending.setter
     def pending(self, status):
+        # 写入时将记录枚举所对应的数字
         self._pending = status.value
