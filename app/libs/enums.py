@@ -2,6 +2,7 @@ from enum import Enum
 
 
 class PendingStatus(Enum):
+    """枚举类，定义交易的状态信息"""
     waiting = 1
     success = 2
     reject = 3

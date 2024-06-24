@@ -11,6 +11,7 @@ from sqlalchemy import desc
 from app.view_models.drift import DriftCollection
 from app.libs.enums import PendingStatus
 from app.models.user import User
+from app.models.wish import Wish
 
 
 @web.route("/drift/<int:gid>", methods=["GET", "POST"])
@@ -83,8 +84,19 @@ def redraw_drift(did):
 
 
 @web.route("/drift/<int:did>/mailed")
+@login_required
 def mailed_drift(did):
-    pass
+    with db.auto_commit():
+        drift = Drift.query.filter_by(gifter_id=current_user.id, id=did).first_or_404()
+        drift.pending = PendingStatus.success
+        current_user.beans += 1
+        # 礼物成功赠送
+        gift = Gift.query.filter_by(id=drift.gift_id).first_or_404()
+        gift.launched = True
+        # 更新已经完成的心愿
+        Wish.query.filter_by(isbn=drift.isbn, uid=drift.requester_id, launched=False).update({Wish.launched: True})
+
+    return redirect(url_for("web.pending"))
 
 
 def save_drift(drift_form, current_gift):

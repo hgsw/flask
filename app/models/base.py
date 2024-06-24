@@ -56,3 +56,6 @@ class Base(db.Model):
         if self.create_time:
             return datetime.fromtimestamp(self.create_time)
         return None
+
+    def delete(self):
+        self.status = 0
