@@ -6,7 +6,9 @@ from app.forms.book import DriftForm
 from app.models.base import db
 from app.models.drift import Drift
 from app.view_models.book import BookViewModel
-from sqlalchemy.sql import desc
+from sqlalchemy.sql import or_
+from sqlalchemy import desc
+from app.view_models.drift import DriftCollection
 
 
 @web.route("/drift/<int:gid>", methods=["GET", "POST"])
@@ -40,13 +42,13 @@ def send_drift(gid):
 @web.route("/pending")
 @login_required
 def pending():
-    drift = (
-        Drift.query.fliter_by(requester_id=current_user.id, gift_id=current_user.id)
-        .order_by(desc(Drift.create_datetime))
+    drifts = (
+        Drift.query.filter(or_(Drift.requester_id == current_user.id, Drift.gift_id == current_user.id))
+        .order_by(Drift.create_time.desc())
         .all()
     )
-
-    return redirect("pending.html")
+    views = DriftCollection(drifts, current_user.id)
+    return render_template("pending.html", drifts=views.data)
 
 
 @web.route("/drift/<int:did>/reject")
