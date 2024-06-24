@@ -23,6 +23,9 @@ class Gift(Base):
     # bid = Column(Integer, ForeignKey("book.id"))
     launched = Column(Boolean, default=False)
 
+    def is_yourself_gift(self, uid):
+        return True if self.uid == uid else False
+
     @classmethod
     def get_user_gifts(cls, uid):
         """根据当前用户id查询所有的赠送清单"""

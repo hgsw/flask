@@ -10,6 +10,9 @@ from app.spider.yushu_book import YuShuBook
 from app.models.gift import Gift
 from app.models.wish import Wish
 from app.models.base import db
+from app.models.drift import Drift
+from app.libs.enums import PendingStatus
+from math import floor
 
 
 class User(UserMixin, Base):
@@ -27,6 +30,24 @@ class User(UserMixin, Base):
     receive_counter = Column(Integer, default=0)
     wx_open_id = Column(String(50))
     wx_name = Column(String(32))
+
+    def can_send_drift(self):
+        """判断能否向他人发起索要书籍"""
+        if self.beans < 1:
+            return False
+        success_gifts_count = Gift.query.filter_by(uid=self.id, launched=True).count()
+        success_receive_count = Drift.query.filter_by(requester_id=self.id, pending=PendingStatus.success).count()
+
+        return True if floor(success_receive_count / 2) <= floor(success_gifts_count) else False
+
+    @property
+    def summary(self):
+        return dict(
+            nickname=self.nickname,
+            beans=self.beans,
+            email=self.email,
+            send_receive=str(self.send_counter) + "/" + str(self.receive_counter),
+        )
 
     # 动态设置数据库password密码
     @property

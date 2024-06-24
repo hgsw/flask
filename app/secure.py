@@ -29,4 +29,4 @@ class MailConfig:
     MAIL_PORT = 465  # 使用SSL加密端口
     MAIL_USE_SSL = True  # 启用SSL加密
     MAIL_USERNAME = "hgsw93@163.com"  # 你的163邮箱用户名
-    MAIL_PASSWORD = "你的SMTP授权码"  # 你的SMTP授权码，而非邮箱登录密码
+    MAIL_PASSWORD = "GQUYQDLAUDEJTWOG"  # 你的SMTP授权码，而非邮箱登录密码
