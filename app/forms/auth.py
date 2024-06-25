@@ -39,3 +39,16 @@ class ResetPasswordForm(Form):
         ]
     )
     password2 = PasswordField(validators=[DataRequired(), Length(6, 32)])
+
+
+class ChangePasswordForm(Form):
+    old_password = PasswordField(validators=[DataRequired(message="密码不可以为空，请输入你的密码"), Length(6, 32)])
+
+    new_password1 = PasswordField(
+        validators=[
+            DataRequired(),
+            Length(6, 32, "密码长度需要在6到32个字符之间，不可以为空"),
+            EqualTo("new_password2", "两次输入的密码不相同"),
+        ]
+    )
+    new_password2 = PasswordField(validators=[DataRequired(), Length(6, 32)])
