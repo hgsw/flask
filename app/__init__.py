@@ -10,8 +10,11 @@ mail = Mail()
 
 
 # @login_manager.user_loader
-# 每个请求开始时（如果需要的话），根据会话中存储的用户id重新加载用户对象
+# 每个请求开始时（如果需要的话，@login_required装饰的资源），根据会话中存储的用户id重新加载用户对象
 # Flask-Login使用这个函数来恢复一个已经登录的用户的完整对象实例，以便在整个请求生命周期中使用
+# User对象需要继承基类UserMixin
+
+
 @login_manager.user_loader
 def load_user(user_id):
     # user = db.session.query(User).get(user_id)
@@ -35,7 +38,7 @@ def create_app():
 
     # 用户登录插件
     login_manager.init_app(app)
-    # 当访问需要登录的页面，这里可以定义跳转登录的界面
+    # 当访问需要@login_required登录的资源页面，这里可以定义跳转登录的界面
     login_manager.login_view = "web.login"
     login_manager.login_message = "请先登录或注册"
     # 邮箱插件
