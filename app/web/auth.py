@@ -31,9 +31,13 @@ def login():
             # login_user是如何知道user模型的用户标识？
             # 这里框架需要实现一个get_id的函数方法。
             # 应用程序验证用户凭证成功后，调用login_user(user) 来记录用户的登录状态
+            # login_user设置为当前请求上下文中的current_user，接通过flask_login.current_user访问当前登录用户
             login_user(user, duration=True)
+            
             # 访问需要登录的界面，登录完成后需要跳转的url地址
+            # next是当我们需要访问@login_required的资源后会自动跳到登录界面，登录后自动调回的实现
             next = request.args.get("next")
+            print(next)
             # 需要防止非法的重定向攻击，需要加校验
             if not next or not next.startswith("/"):
                 next = url_for("web.index")
